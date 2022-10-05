@@ -2,42 +2,53 @@ package org.example.springcourse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Component
 public class MusicPlayer {
+
+    @Value("${musicPlayerProperty.name}")
+    private String playerName;
+    @Value("${musicPlayerProperty.volume}")
+    private int playerVolume;
+    @Value("${musicPlayerProperty.useEqualizer}")
+    private boolean useEqualizer;
+    @Value("${musicPlayerProperty.playerThemeName}")
+    private String playerThemeName;
+
     @Autowired
     @Qualifier("myRockMusicBean")
     Music music;
-
+    @Autowired
+    @Qualifier("jazzMusic")
     Music music1;
+    @Autowired
+    @Qualifier("classicalMusic")
     Music music2;
+
+    RockMusic rockMusic;
+    ClassicalMusic classicalMusic;
+    JazzMusic jazzMusic;
+
+
     private List<Music> musicList = new ArrayList<>();
-    private String playerName;
-    private int playerVolume;
-    private boolean useEqualizer;
-    private String playerThemeName;
+
 
     //CONSTRUCTORS
     public MusicPlayer(){}
-    //Inversion Of Control
-    //Dependency Injection via Constructor
     public MusicPlayer(List<Music> musicList){this.musicList=musicList;}
     @Autowired
-    public MusicPlayer(@Qualifier("classicalMusic") Music music1,
-                       @Qualifier("jazzMusic") Music music2){
-        this.music1=music1;
-        this.music2=music2;
+    public MusicPlayer(ClassicalMusic classicalMusic, JazzMusic jazzMusic, RockMusic rockMusic){
+        this.classicalMusic=classicalMusic;
+        this.jazzMusic=jazzMusic;
+        this.rockMusic=rockMusic;
     }
 
-    //Dependency Injection via Setter
-    //Когда spring будет внедрять зависимость, он:
-    //- отбросит "set"
-    //- переведет 'Music' -> 'music'
-    //- в ApplicationContext в property 'name' подставит получившееся 'music' и передаст в него в качестве вргумента бин musicBean
     //SETTER
     public void setMusic(Music music) {this.music = music;}
     public void setPlayerName(String playerName) { this.playerName = playerName;}
@@ -63,6 +74,22 @@ public class MusicPlayer {
     public void playMusicList(){
         for (Music currentMusic:musicList) {
             System.out.println("LISTMUSIC now playing: " + currentMusic.getSong());
+        }
+    }
+
+    public void playRandomMusic(MusicType musicType){
+        Random rnd = new Random();
+        int randomSong = rnd.nextInt(3);
+        switch (musicType) {
+            case ROCK:
+                System.out.println(rockMusic.getRandomSong());
+                break;
+            case CLASSICAL:
+                System.out.println(classicalMusic.getRandomSong());
+                break;
+            case JAZZ:
+                System.out.println(jazzMusic.getRandomSong());
+                break;
         }
     }
 
