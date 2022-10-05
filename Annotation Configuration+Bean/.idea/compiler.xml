@@ -6,8 +6,8 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="Annotation Configuration+Bean" />
         <module name="Bean_Scope_XML-FileProp-Conf" />
-        <module name="Annotation Component+Autowired+PostConstruct+PreDestroy" />
         <module name="Annotation Component" />
         <module name="spring1_1" />
       </profile>
